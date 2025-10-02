@@ -1,6 +1,7 @@
 package com.ud.tictactoeud
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,6 +26,7 @@ import com.ud.tictactoeud.ui.theme.TicTacToeUdTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("logud", "application oncreate")
         enableEdgeToEdge()
         setContent {
             TicTacToeUdTheme {
@@ -35,6 +37,36 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("logud", "application start")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("logud", "application resume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("logud", "application pause")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("logud", "application destroy")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("logud", "application resart")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("logud", "application onstop")
     }
 }
 
