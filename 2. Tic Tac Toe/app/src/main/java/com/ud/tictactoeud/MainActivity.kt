@@ -72,48 +72,50 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Game(modifier: Modifier = Modifier) {
-    Text(
-        text = "Player vs machine",
-        modifier = modifier
-    )
-    Column(
+    Column {
+        Text(
+            text = "Player vs machine",
+            modifier = modifier
+        )
 
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        for (row in 0..2) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                for (column in 0..2) {
-                    Button(
-                        onClick = { /*TODO */ },
-                        modifier = Modifier
-                            .size(100.dp)
-                            .padding(4.dp)
-                    ) {
-                        Text(text = "(${row + 1}, ${column + 1})", color = Color.White)
+        Column(
+            modifier = Modifier
+                .padding(2.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            for (row in 0..2) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    for (column in 0..2) {
+                        Button(
+                            onClick = { /*TODO */ },
+                            modifier = Modifier
+                                .size(100.dp)
+                                .padding(4.dp)
+                        ) {
+                            Text(text = "(${row + 1}, ${column + 1})", color = Color.White)
+                        }
                     }
                 }
             }
         }
-    }
 
-    Text(
-        text = "Status: --",
-        modifier = modifier
-    )
+        Text(
+            text = "Status: --",
+            modifier = modifier
+        )
+
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun Game() {
     TicTacToeUdTheme {
-        Game()
+        Game(modifier = Modifier.padding(2.dp))
     }
 }
