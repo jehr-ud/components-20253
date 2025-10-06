@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ud.tictactoeud.models.Board
+import com.ud.tictactoeud.models.GameLogic
 import com.ud.tictactoeud.ui.theme.TicTacToeUdTheme
 
 class MainActivity : ComponentActivity() {
@@ -72,6 +74,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Game(modifier: Modifier = Modifier) {
+    val board = Board()
+    val gameLogic = GameLogic(true, board)
     Column {
         Text(
             text = "Player vs machine",
@@ -92,7 +96,7 @@ fun Game(modifier: Modifier = Modifier) {
                 ) {
                     for (column in 0..2) {
                         Button(
-                            onClick = { /*TODO */ },
+                            onClick = { gameLogic.changeTurn(row)},
                             modifier = Modifier
                                 .size(100.dp)
                                 .padding(4.dp)
