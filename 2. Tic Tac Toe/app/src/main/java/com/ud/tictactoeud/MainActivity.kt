@@ -76,6 +76,7 @@ class MainActivity : ComponentActivity() {
 fun Game(modifier: Modifier = Modifier) {
     val board = Board()
     val gameLogic = GameLogic(true, board)
+    var position = 0
     Column {
         Text(
             text = "Player vs machine",
@@ -96,13 +97,14 @@ fun Game(modifier: Modifier = Modifier) {
                 ) {
                     for (column in 0..2) {
                         Button(
-                            onClick = { gameLogic.changeTurn(row)},
+                            onClick = { gameLogic.changeTurn(position)},
                             modifier = Modifier
                                 .size(100.dp)
                                 .padding(4.dp)
                         ) {
-                            Text(text = "(${row + 1}, ${column + 1})", color = Color.White)
+                            Text(text = "${gameLogic.board.getPosition(position)}", color = Color.White)
                         }
+                        position++
                     }
                 }
             }

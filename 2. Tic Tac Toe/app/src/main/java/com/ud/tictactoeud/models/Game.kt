@@ -71,6 +71,10 @@ class Board {
     fun changePosition(position: Int, mark: Mark){
         positions[position] = mark
     }
+
+    fun getPosition(position: Int): Mark{
+        return positions[position]
+    }
 }
 
 
