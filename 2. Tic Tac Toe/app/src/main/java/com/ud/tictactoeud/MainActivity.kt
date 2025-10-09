@@ -119,6 +119,16 @@ fun Game(modifier: Modifier = Modifier) {
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold
         )
+        Button(
+            onClick = {
+                gameLogic.reset()
+                Log.d("logud", "Juego reiniciado")
+            },
+            modifier = Modifier.padding(top = 16.dp)
+
+        ) {
+            Text("Reiniciar juego")
+        }
 
 
         if (gameStatus != StatusGame.inGame) {
