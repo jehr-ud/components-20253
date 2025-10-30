@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ud.myapplication.ui.theme.MyApplicationTheme
@@ -19,10 +20,14 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val session = SessionManager(this)
+        val userEmail = session.getEmail()
+
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                MyDrawerScreen()
+                MyDrawerScreen(session)
             }
         }
     }
@@ -30,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyDrawerScreen() {
+fun MyDrawerScreen(sessionManager: SessionManager) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var selectedItem by remember { mutableStateOf("Tutorial") }
@@ -60,14 +65,17 @@ fun MyDrawerScreen() {
                     }
                 )
 
-                NavigationDrawerItem(
-                    label = { Text("Nombre") },
-                    selected = selectedItem == "Nombre",
-                    onClick = {
-                        selectedItem = "Nombre"
-                        scope.launch { drawerState.close() }
-                    }
-                )
+                if (sessionManager.getEmail() != null){
+                    NavigationDrawerItem(
+                        label = { sessionManager.getEmail()?.let { Text(it) } },
+                        selected = selectedItem == sessionManager.getEmail(),
+                        onClick = {
+                            selectedItem = "Nombre"
+                            scope.launch { drawerState.close() }
+                        }
+                    )
+                }
+
             }
         }
     ) {
@@ -119,8 +127,9 @@ fun NombreScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true, name = "Drawer completo")
 @Composable
 fun PreviewMyDrawerScreen() {
+    val session = SessionManager(LocalContext.current)
     MyApplicationTheme {
-        MyDrawerScreen()
+        MyDrawerScreen(session)
     }
 }
 
