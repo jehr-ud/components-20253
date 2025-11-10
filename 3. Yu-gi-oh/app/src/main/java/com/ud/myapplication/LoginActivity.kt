@@ -30,6 +30,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
+private val compose: Any
+
 class LoginActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var session: SessionManager
