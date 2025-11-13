@@ -5,11 +5,28 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -17,8 +34,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ud.myapplication.SessionManager
 import com.ud.myapplication.ui.composables.profile.ProfileScreen
 import com.ud.myapplication.ui.composables.room.RoomMenuScreen
-import com.ud.myapplication.ui.theme.MyApplicationTheme
 import com.ud.myapplication.ui.composables.tutorial.TutorialScreen
+import com.ud.myapplication.ui.theme.MyApplicationTheme
 import com.ud.myapplication.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 
@@ -73,7 +90,7 @@ fun MyDrawerScreen(sessionManager: SessionManager) {
                 if (sessionManager.getEmail() != null) {
                     NavigationDrawerItem(
                         label = { sessionManager.getEmail()?.let { Text(it) } },
-                        selected = selectedItem == sessionManager.getEmail(),
+                        selected = selectedItem == "Nombre",
                         onClick = {
                             selectedItem = "Nombre"
                             scope.launch { drawerState.close() }
@@ -84,16 +101,16 @@ fun MyDrawerScreen(sessionManager: SessionManager) {
 
                     NavigationDrawerItem(
                         label = { Text("Cerrar sesion") },
-                        selected = selectedItem == sessionManager.getEmail(),
+                        selected = false,
                         onClick = {
-                            selectedItem = "Nombre"
                             scope.launch {
-                                authViewModel.signOut {
+                                authViewModel.signOut { 
                                     sessionManager.clearSession()
                                     val intent = Intent(context, LoginActivity::class.java)
                                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     context.startActivity(intent)
-                            }}
+                                }
+                            }
                         }
                     )
                 }
@@ -102,7 +119,7 @@ fun MyDrawerScreen(sessionManager: SessionManager) {
     ) {
         Scaffold(
             topBar = {
-                SmallTopAppBar(
+                TopAppBar(
                     title = { Text(selectedItem) },
                     navigationIcon = {
                         IconButton(onClick = {
@@ -120,7 +137,7 @@ fun MyDrawerScreen(sessionManager: SessionManager) {
         ) { innerPadding ->
             when (selectedItem) {
                 "Tutorial" -> TutorialScreen(Modifier.padding(innerPadding))
-                "Salas" -> RoomMenuScreen(Modifier.padding(innerPadding), sessionManager=sessionManager)
+                "Salas" -> RoomMenuScreen(Modifier.padding(innerPadding), sessionManager = sessionManager)
                 "Nombre" -> ProfileScreen(Modifier.padding(innerPadding))
             }
         }

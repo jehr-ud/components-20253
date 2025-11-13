@@ -35,7 +35,7 @@ fun GameScreen(roomCode: String, viewModel: RoomViewModel = viewModel()) {
             } else {
                 Text("Host: ${roomState?.hostPlayer ?: "-"}")
                 Text("Invitado: ${roomState?.guestPlayer ?: "Esperando..."}")
-                Text("Turno actual: ${roomState?.playernTurn ?: "-"}")
+                Text("Turno actual: ${roomState?.playerTurn ?: "-"}")
 
                 Spacer(modifier = Modifier.height(32.dp))
                 Text("lógica del juego 🎮!")

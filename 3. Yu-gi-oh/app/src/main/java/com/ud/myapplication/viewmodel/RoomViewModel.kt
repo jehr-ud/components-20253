@@ -1,6 +1,5 @@
 package com.ud.myapplication.viewmodel
 
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.*
@@ -19,7 +18,7 @@ class RoomViewModel : ViewModel() {
 
     fun createRoom(roomCode: String, session: SessionManager, onResult: (Boolean) -> Unit) {
         val host = session.getUserId().toString()
-        val room = Room(roomCode, hostPlayer = host, playernTurn = host)
+        val room = Room(id = roomCode, hostPlayer = host, playerTurn = host)
 
         database.child(roomCode)
             .setValue(room)
