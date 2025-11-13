@@ -1,4 +1,4 @@
-package com.ud.myapplication
+package com.ud.myapplication.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.ud.myapplication.SessionManager
 
-private val compose: Any
 
 class LoginActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
@@ -55,7 +55,7 @@ class LoginActivity : ComponentActivity() {
     }
 
     fun goToGame(){
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, GameActivity::class.java)
         startActivity(intent)
     }
 }

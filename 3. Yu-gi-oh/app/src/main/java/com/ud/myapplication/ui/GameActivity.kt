@@ -1,30 +1,33 @@
-package com.ud.myapplication
+package com.ud.myapplication.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ud.myapplication.SessionManager
+import com.ud.myapplication.ui.composables.profile.ProfileScreen
+import com.ud.myapplication.ui.composables.room.RoomMenuScreen
 import com.ud.myapplication.ui.theme.MyApplicationTheme
+import com.ud.myapplication.ui.composables.tutorial.TutorialScreen
+import com.ud.myapplication.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         val session = SessionManager(this)
-        val userEmail = session.getEmail()
-
-        enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
                 MyDrawerScreen(session)
@@ -39,6 +42,8 @@ fun MyDrawerScreen(sessionManager: SessionManager) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var selectedItem by remember { mutableStateOf("Tutorial") }
+    val authViewModel: AuthViewModel = viewModel()
+    val context = LocalContext.current
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -57,15 +62,15 @@ fun MyDrawerScreen(sessionManager: SessionManager) {
                 )
 
                 NavigationDrawerItem(
-                    label = { Text("Seleccionar cartas") },
-                    selected = selectedItem == "Seleccionar cartas",
+                    label = { Text("Salas") },
+                    selected = selectedItem == "Salas",
                     onClick = {
-                        selectedItem = "Seleccionar cartas"
+                        selectedItem = "Salas"
                         scope.launch { drawerState.close() }
                     }
                 )
 
-                if (sessionManager.getEmail() != null){
+                if (sessionManager.getEmail() != null) {
                     NavigationDrawerItem(
                         label = { sessionManager.getEmail()?.let { Text(it) } },
                         selected = selectedItem == sessionManager.getEmail(),
@@ -74,8 +79,24 @@ fun MyDrawerScreen(sessionManager: SessionManager) {
                             scope.launch { drawerState.close() }
                         }
                     )
-                }
 
+                    HorizontalDivider()
+
+                    NavigationDrawerItem(
+                        label = { Text("Cerrar sesion") },
+                        selected = selectedItem == sessionManager.getEmail(),
+                        onClick = {
+                            selectedItem = "Nombre"
+                            scope.launch {
+                                authViewModel.signOut {
+                                    sessionManager.clearSession()
+                                    val intent = Intent(context, LoginActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    context.startActivity(intent)
+                            }}
+                        }
+                    )
+                }
             }
         }
     ) {
@@ -99,60 +120,9 @@ fun MyDrawerScreen(sessionManager: SessionManager) {
         ) { innerPadding ->
             when (selectedItem) {
                 "Tutorial" -> TutorialScreen(Modifier.padding(innerPadding))
-                "Seleccionar cartas" -> SeleccionarCartasScreen(Modifier.padding(innerPadding))
-                "Nombre" -> NombreScreen(Modifier.padding(innerPadding))
+                "Salas" -> RoomMenuScreen(Modifier.padding(innerPadding), sessionManager=sessionManager)
+                "Nombre" -> ProfileScreen(Modifier.padding(innerPadding))
             }
         }
-    }
-}
-
-
-@Composable
-fun TutorialScreen(modifier: Modifier = Modifier) {
-    Text("Pantalla de Tutorial", modifier = modifier.padding(16.dp))
-}
-
-@Composable
-fun SeleccionarCartasScreen(modifier: Modifier = Modifier) {
-    Text("Pantalla de Selección de Cartas", modifier = modifier.padding(16.dp))
-}
-
-@Composable
-fun NombreScreen(modifier: Modifier = Modifier) {
-    Text("Pantalla de Nombre", modifier = modifier.padding(16.dp))
-}
-
-
-
-@Preview(showBackground = true, name = "Drawer completo")
-@Composable
-fun PreviewMyDrawerScreen() {
-    val session = SessionManager(LocalContext.current)
-    MyApplicationTheme {
-        MyDrawerScreen(session)
-    }
-}
-
-@Preview(showBackground = true, name = "Pantalla Tutorial")
-@Composable
-fun PreviewTutorial() {
-    MyApplicationTheme {
-        TutorialScreen()
-    }
-}
-
-@Preview(showBackground = true, name = "Pantalla Seleccionar Cartas")
-@Composable
-fun PreviewSeleccionarCartas() {
-    MyApplicationTheme {
-        SeleccionarCartasScreen()
-    }
-}
-
-@Preview(showBackground = true, name = "Pantalla Nombre")
-@Composable
-fun PreviewNombre() {
-    MyApplicationTheme {
-        NombreScreen()
     }
 }
