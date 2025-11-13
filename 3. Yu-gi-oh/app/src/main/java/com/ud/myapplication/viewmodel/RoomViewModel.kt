@@ -19,7 +19,7 @@ class RoomViewModel : ViewModel() {
 
     fun createRoom(roomCode: String, session: SessionManager, onResult: (Boolean) -> Unit) {
         val host = session.getUserId().toString()
-        val room = Room(roomCode, hostPlayer = host, playernTurn = host)
+        val room = Room(roomCode, hostPlayer = host, playerTurn = host)
 
         database.child(roomCode)
             .setValue(room)
