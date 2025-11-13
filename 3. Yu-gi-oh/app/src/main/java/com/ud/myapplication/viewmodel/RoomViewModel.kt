@@ -20,6 +20,7 @@ class RoomViewModel : ViewModel() {
         val host = session.getUserId().toString()
         val room = Room(id = roomCode, hostPlayer = host, playerTurn = host)
 
+
         database.child(roomCode)
             .setValue(room)
             .addOnSuccessListener { onResult(true) }
